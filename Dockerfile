@@ -1,10 +1,18 @@
-FROM node:18-alpine
+# Fetching the latest node image on alpine linux
+FROM node:alpine AS development
 
-ARG SHOPIFY_API_KEY
-ENV SHOPIFY_API_KEY=$SHOPIFY_API_KEY
-EXPOSE 8081
-WORKDIR /app
-COPY web .
+# Declaring env
+ENV NODE_ENV development
+
+# Setting up the work directory
+WORKDIR /react-app
+
+# Installing dependencies
+COPY ./package.json /react-app
 RUN npm install
-RUN cd frontend && npm install && npm run build
-CMD ["npm", "run", "serve"]
+
+# Copying all the files in our project
+COPY . .
+
+# Starting our application
+CMD npm start
